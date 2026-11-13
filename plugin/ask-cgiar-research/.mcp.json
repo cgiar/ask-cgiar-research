@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cgiar-research": {
+      "type": "http",
+      "url": "https://cgiar-ask-cgiar-research.hf.space/mcp",
+      "headers": {
+        "X-Pilot-Key": "${CGIAR_PILOT_KEY:-}"
+      }
+    }
+  }
+}

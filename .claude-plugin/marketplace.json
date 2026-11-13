@@ -1,0 +1,12 @@
+{
+  "name": "cgiar",
+  "owner": { "name": "CGIAR" },
+  "description": "CGIAR tools for AI assistants",
+  "plugins": [
+    {
+      "name": "ask-cgiar-research",
+      "source": "./plugin/ask-cgiar-research",
+      "description": "Answer agrifood questions from openly licensed CGIAR research publications, with citations"
+    }
+  ]
+}

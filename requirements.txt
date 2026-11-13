@@ -1,0 +1,9 @@
+mcp==2.3.0
+uvicorn==0.54.0
+starlette==1.10.0
+sentence-transformers==6.3.0
+transformers==5.22.2
+numpy==2.4.6
+huggingface_hub==2.4.0
+anyio
+pydantic

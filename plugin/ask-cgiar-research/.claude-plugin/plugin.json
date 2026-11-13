@@ -1,0 +1,10 @@
+{
+  "name": "ask-cgiar-research",
+  "version": "0.1.0",
+  "description": "Answer agriculture, food systems, nutrition, climate and livelihoods questions from openly licensed CGIAR research publications, with citations",
+  "author": { "name": "CGIAR" },
+  "homepage": "https://huggingface.co/spaces/CGIAR/ask-cgiar-research",
+  "repository": "https://huggingface.co/spaces/CGIAR/ask-cgiar-research",
+  "license": "Apache-2.0",
+  "keywords": ["cgiar", "agriculture", "food-security", "research", "evidence", "mcp"]
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask CGIAR Research</title>
+<meta name="description" content="A public MCP server that lets AI assistants search and cite openly licensed CGIAR research publications.">
+<style>
+  :root {
+    --bg: #fbfaf7; --fg: #1d2420; --muted: #5b655f; --line: #dfe3dc; --card: #ffffff;
+    --accent: #2f6b3f; --accent-soft: #e6f0e8; --code-bg: #f1f3ef;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #141815; --fg: #e7ebe6; --muted: #a2aca4; --line: #2c332e; --card: #1b201c;
+            --accent: #8fc79c; --accent-soft: #1f2e23; --code-bg: #20261f; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.15rem; margin: 40px 0 8px; }
+  h3 { font-size: 1rem; margin: 20px 0 4px; }
+  p, li { color: var(--fg); }
+  .lede { color: var(--muted); font-size: 1.1rem; margin: 0 0 24px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .stat b { display: block; font-size: 1.4rem; }
+  .stat span { color: var(--muted); font-size: .9rem; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .88rem; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+        overflow-x: auto; white-space: pre; }
+  pre code { background: none; padding: 0; }
+  .note { background: var(--accent-soft); border-radius: 8px; padding: 12px 14px; margin: 16px 0; }
+  a { color: var(--accent); }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ask CGIAR Research</h1>
+  <p class="lede">A public tool that lets AI assistants search openly licensed CGIAR research
+  publications and answer agrifood questions with citations to the source documents.</p>
+
+  <div class="stats">
+    <div class="stat"><b>29,556</b><span>publications</span></div>
+    <div class="stat"><b>1.0M</b><span>searchable passages</span></div>
+    <div class="stat"><b>en · es · fr · pt</b><span>languages, cross-lingual search</span></div>
+  </div>
+
+  <p>It is a <a href="https://modelcontextprotocol.io">Model Context Protocol</a> (MCP) server, so it works
+  with Claude and any other assistant or agent framework that supports remote MCP servers. Assistants
+  get two tools: <code>search_cgiar_publications</code> (hybrid keyword + semantic search with country,
+  region, year and language filters) and <code>get_cgiar_document</code> (read the passages around a hit).</p>
+
+  <div class="note"><b>Invitation-only pilot.</b> The service is being reviewed by CGIAR scientists before
+  its public launch. Until then, connecting requires a pilot key from the CGIAR team, and the instructions
+  below will work once the service opens.</div>
+
+  <h2>Connect</h2>
+  <p>Server URL: <code>https://cgiar-ask-cgiar-research.hf.space/mcp</code> (no sign-in).</p>
+
+  <h3>Claude Code: plugin with search guidance (recommended)</h3>
+  <pre><code>claude plugin marketplace add https://huggingface.co/spaces/CGIAR/ask-cgiar-research.git
+claude plugin install ask-cgiar-research@cgiar</code></pre>
+  <p>The plugin adds the server and a skill that teaches the assistant how to search, read and cite the
+  evidence. Then ask, for example: <code>/ask-cgiar-research:ask How do smallholders cope with drought in the Sahel?</code></p>
+
+  <h3>Claude Code: server only</h3>
+  <pre><code>claude mcp add --transport http cgiar-research https://cgiar-ask-cgiar-research.hf.space/mcp</code></pre>
+
+  <h3>Claude.ai and Claude Desktop</h3>
+  <p>Customize → Connectors → <b>Add custom connector</b>, paste the server URL, and choose no sign-in.
+  For better answers, also upload the skill (<a href="https://huggingface.co/spaces/CGIAR/ask-cgiar-research/resolve/main/plugin/ask-cgiar-research-skill.zip">ask-cgiar-research-skill.zip</a>)
+  under Customize → Skills.</p>
+
+  <h3>Other assistants and agent frameworks</h3>
+  <p>Add the server URL as a remote MCP server using streamable HTTP transport. The server sends usage
+  guidance to clients that support MCP server instructions.</p>
+
+  <h2>What is included</h2>
+  <p>Publications from the <a href="https://gardian.cgiar.org">GARDIAN</a>-indexed CGIAR research outputs that carry an
+  open license allowing redistribution: CC-BY (27,771), CC-BY-SA (1,630) and CC0 (155). About 84% are
+  full text; the rest are abstracts. Tables and figure text were removed during processing, so check the
+  source document for exact figures. Coverage is uneven: if nothing is found, that is not evidence that
+  no CGIAR research exists on the topic.</p>
+
+  <div class="note">Answers produced with this tool are generated by AI from CGIAR publications. They are
+  <b>not official CGIAR positions</b>, and they can contain errors. Always check the cited sources.</div>
+
+  <h2>Privacy and usage data</h2>
+  <p>To report on use, CGIAR records for each tool call: the time, the tool, the search query after
+  automated removal of personal information (names, emails, phone numbers, URLs, ID numbers and precise
+  coordinates), filters, the documents returned, response time, the name of the client application, and a
+  session identifier that changes daily. <b>IP addresses and raw queries are not stored.</b> Records are kept
+  in a private CGIAR repository for 24 months and then deleted. Automated removal is not perfect, so please
+  do not include personal details in questions.</p>
+
+  <h2>Licensing</h2>
+  <p>Each result shows its document's license and source URL. Reuse of passages must follow that license
+  (attribution for CC-BY; attribution and share-alike for CC-BY-SA). The server code is released under the
+  Apache License 2.0.</p>
+
+  <h2>Contact</h2>
+  <p>Questions and feedback: Jawoo Koo, via the <a href="https://www.ifpri.org/contact-us/">IFPRI contact form</a>.</p>
+
+  <footer>
+    Owned and operated by <b>CGIAR</b>. Developed under the <b>GAIA project</b>, funded by the
+    <b>Gates Foundation</b> and <b>UK International Development (FCDO)</b>, with the support of the
+    <b>CGIAR Digital Transformation Accelerator</b> program.
+    <br>Version 0.1.0 (pilot) · <a href="/health">Service status</a>
+  </footer>
+</main>
+</body>
+</html>
