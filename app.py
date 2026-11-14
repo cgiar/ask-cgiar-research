@@ -10,11 +10,8 @@ Environment:
   HF_TOKEN    token that can read INDEX_REPO and write LOG_REPO (Space secret)
   LOG_REPO    private HF dataset for usage logs; see usage_log.py
   RATE_PER_MIN  tool calls per minute per client address (default 60)
-  PILOT_KEY   if set, /mcp requires one of these comma-separated keys, sent as the X-Pilot-Key
-              header or the ?key= query parameter (Space secret; unset at public launch)
 """
-import hmac, os, threading, time
-from urllib.parse import parse_qs
+import os, threading, time
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Annotated, Literal
@@ -35,8 +32,7 @@ INDEX_REPO = os.environ.get("INDEX_REPO", "CGIAR/ask-cgiar-research-index")
 INDEX_NAME = os.environ.get("INDEX_NAME", "cgiar-open")
 DATA_DIR = os.environ.get("DATA_DIR", "/tmp/index")
 RATE_PER_MIN = int(os.environ.get("RATE_PER_MIN", "60"))
-PILOT_KEYS = [k.strip() for k in os.environ.get("PILOT_KEY", "").split(",") if k.strip()]
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 HERE = Path(__file__).parent
 
 INSTRUCTIONS = """\
@@ -222,25 +218,9 @@ async def health(request: Request):
                              licenses=idx.licenses if idx else None))
 
 
-def pilot_gate(inner):
-    """During the invitation-only pilot, reject /mcp requests without a valid key (403, not 401,
-    so clients don't start an OAuth flow). The landing page and /health stay open."""
-    async def gate(scope, receive, send):
-        if PILOT_KEYS and scope["type"] == "http" and scope["path"].startswith("/mcp"):
-            headers = dict(scope["headers"])
-            given = headers.get(b"x-pilot-key", b"").decode("latin-1") or \
-                (parse_qs(scope.get("query_string", b"").decode("latin-1")).get("key") or [""])[0]
-            if not any(hmac.compare_digest(given.encode(), k.encode()) for k in PILOT_KEYS):
-                response = JSONResponse({"error": "Ask CGIAR Research is in an invitation-only pilot. "
-                                                  "A valid pilot key is required."}, status_code=403)
-                return await response(scope, receive, send)
-        return await inner(scope, receive, send)
-    return gate
-
-
-app = pilot_gate(mcp.streamable_http_app(host="0.0.0.0"))
+app = mcp.streamable_http_app(host="0.0.0.0")
 
 if __name__ == "__main__":
     import uvicorn
-    # No access log: it would record client addresses and ?key= query strings.
+    # No access log: it would record client addresses.
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "7860")), access_log=False)

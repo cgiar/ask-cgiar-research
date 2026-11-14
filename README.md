@@ -29,9 +29,6 @@ French, Portuguese) and answer agrifood questions with citations.
 which runs the service. [github.com/cgiar/ask-cgiar-research](https://github.com/cgiar/ask-cgiar-research) is a
 mirror for browsing, issues and installing the plugin.
 
-> **Invitation-only pilot.** Until the public launch, the server requires a pilot key from the CGIAR team
-> (`X-Pilot-Key` header or `?key=` query parameter).
-
 ## Tools
 
 | Tool | What it does |
@@ -105,7 +102,6 @@ plugin/           Claude Code plugin + claude.ai skill
 | `INDEX_REPO` | default `CGIAR/ask-cgiar-research-index` |
 | `LOG_REPO` | e.g. `CGIAR/ask-cgiar-research-logs` (private) |
 | `RATE_PER_MIN` | default 60 |
-| `PILOT_KEY` | secret; comma-separated pilot keys. When set, `/mcp` requires one. Remove at public launch |
 
 ## Contact
 
