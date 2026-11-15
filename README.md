@@ -41,7 +41,7 @@ mirror for browsing, issues and installing the plugin.
 **Claude Code, plugin with search guidance (recommended):**
 
 ```bash
-claude plugin marketplace add https://huggingface.co/spaces/CGIAR/ask-cgiar-research.git
+claude plugin marketplace add cgiar/ask-cgiar-research
 claude plugin install ask-cgiar-research@cgiar
 ```
 
