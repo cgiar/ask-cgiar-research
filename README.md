@@ -38,24 +38,32 @@ mirror for browsing, issues and installing the plugin.
 
 ## Connect
 
-**Claude Code, plugin with search guidance (recommended):**
+There are two parts. The **connector** (this MCP server) does the searching and is required. The
+**skill** tells Claude how to search, read and cite the results; it is optional but gives better answers.
+The skill does nothing without the connector.
+
+**Claude Code, plugin with connector and skill (recommended):**
 
 ```bash
 claude plugin marketplace add cgiar/ask-cgiar-research
 claude plugin install ask-cgiar-research@cgiar
 ```
 
-**Claude Code, server only:**
+**Claude Code, connector only:**
 
 ```bash
 claude mcp add --transport http cgiar-research https://cgiar-ask-cgiar-research.hf.space/mcp
 ```
 
 **Claude.ai / Claude Desktop:**
-1. Go to Customize → Connectors → Add custom connector, paste the server URL, and choose no sign-in.
-2. Optionally upload [`plugin/ask-cgiar-research-skill.zip`](plugin/ask-cgiar-research-skill.zip) under Customize → Skills.
+1. Connector (required): go to Customize → Connectors → Add custom connector, paste the server URL,
+   and choose no sign-in. Organization accounts may need an admin to allow custom connectors.
+2. Skill (recommended): upload [`plugin/ask-cgiar-research-skill.zip`](plugin/ask-cgiar-research-skill.zip)
+   under Customize → Skills.
 
-**Other MCP clients:** add the URL as a remote streamable-HTTP MCP server.
+**Other MCP clients:** add the URL as a remote streamable-HTTP MCP server. The skill is Claude's format;
+in other assistants, the text of
+[`SKILL.md`](plugin/ask-cgiar-research/skills/ask/SKILL.md) can be pasted into custom instructions instead.
 
 ## Data
 

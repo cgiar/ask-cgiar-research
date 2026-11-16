@@ -56,24 +56,34 @@
 
   <h2>Connect</h2>
   <p>Server URL: <code>https://cgiar-ask-cgiar-research.hf.space/mcp</code> (no sign-in).</p>
+  <p>There are two parts. The <b>connector</b> (this server) does the searching and is required. The
+  <b>skill</b> tells Claude how to search, read and cite the results; it is optional but gives better
+  answers. The skill does nothing without the connector.</p>
 
-  <h3>Claude Code: plugin with search guidance (recommended)</h3>
+  <h3>Claude Code: plugin with connector and skill (recommended)</h3>
   <pre><code>claude plugin marketplace add cgiar/ask-cgiar-research
 claude plugin install ask-cgiar-research@cgiar</code></pre>
-  <p>The plugin adds the server and a skill that teaches the assistant how to search, read and cite the
+  <p>The plugin adds the connector and the skill that teaches the assistant how to search, read and cite the
   evidence. Then ask, for example: <code>/ask-cgiar-research:ask How do smallholders cope with drought in the Sahel?</code></p>
 
-  <h3>Claude Code: server only</h3>
+  <h3>Claude Code: connector only</h3>
   <pre><code>claude mcp add --transport http cgiar-research https://cgiar-ask-cgiar-research.hf.space/mcp</code></pre>
 
   <h3>Claude.ai and Claude Desktop</h3>
-  <p>Customize → Connectors → <b>Add custom connector</b>, paste the server URL, and choose no sign-in.
-  For better answers, also upload the skill (<a href="https://huggingface.co/spaces/CGIAR/ask-cgiar-research/resolve/main/plugin/ask-cgiar-research-skill.zip">ask-cgiar-research-skill.zip</a>)
-  under Customize → Skills.</p>
+  <ol>
+    <li><b>Connector (required):</b> Customize → Connectors → <b>Add custom connector</b>, paste the server
+    URL, and choose no sign-in. On organization accounts, an admin may need to allow custom connectors.</li>
+    <li><b>Skill (recommended):</b> download
+    <a href="https://huggingface.co/spaces/CGIAR/ask-cgiar-research/resolve/main/plugin/ask-cgiar-research-skill.zip">ask-cgiar-research-skill.zip</a>
+    and upload it under Customize → Skills.</li>
+  </ol>
 
   <h3>Other assistants and agent frameworks</h3>
   <p>Add the server URL as a remote MCP server using streamable HTTP transport. The server sends usage
-  guidance to clients that support MCP server instructions.</p>
+  guidance to clients that support MCP server instructions. The skill is Claude's format; in other
+  assistants, the text of
+  <a href="https://huggingface.co/spaces/CGIAR/ask-cgiar-research/blob/main/plugin/ask-cgiar-research/skills/ask/SKILL.md">SKILL.md</a>
+  can be pasted into custom instructions instead.</p>
 
   <h2>What is included</h2>
   <p>Publications from the <a href="https://gardian.cgiar.org">GARDIAN</a>-indexed CGIAR research outputs that carry an
